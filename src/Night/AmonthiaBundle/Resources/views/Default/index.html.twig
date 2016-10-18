@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getbootstrap.com/favicon.ico">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Cinzel|Italianno|Marcellus+SC|Sacramento|Tangerine"
+          rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+
+    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+
+<body>
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <div class="side-menu">
+            {{ knp_menu_render('AmonthiaBundle:Builder:mainMenu', {'allow_safe_labels': true}) }}
+            {#<ul class="nav nav-pills nav-stacked">#}
+                {#<li class="active"><a href="#"><span class="menu-label">Home</span><span class="icon glyphicon glyphicon-home"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">Campaigns</span><span class="icon glyphicon glyphicon-flag"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">History</span><span class="icon glyphicon glyphicon-book"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">Codex</span><span class="icon glyphicon glyphicon-tasks"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">Map</span><span class="icon glyphicon glyphicon-map-marker"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">Members</span><span class="icon glyphicon glyphicon-knight"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">Gallery</span><span class="icon glyphicon glyphicon-picture"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">Downloads</span><span class="icon glyphicon glyphicon-download"></span></a></li>#}
+                {#<li><a href="#"><span class="menu-label">Forum</span><span class="icon glyphicon glyphicon-bullhorn"></span></a></li>#}
+            {#</ul>#}
+        </div>
+    </div>
+
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <button href="#menu-toggle" class="btn btn-default nb-toggle button-toggled" id="menu-toggle"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Amonthia</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if app.user is not empty %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">{{ 'trans.notifications' | trans }} <span class="badge" id="pending-notification">0</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{#{{ path('publeash_user_pendingauthorshiprequests') }}#}">{{ 'notification.authorship' | trans }} <span class="badge" id="pending-authorship">0</span></a></li>
+                            <li><a href="{#{{ path('publeash_user_pendingauthorisationrequests') }}#}">{{ 'notification.authorization' | trans }} <span class="badge" id="pending-authorization">0</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false"><img src="{#{{ gravatar(app.user.email, 30, 'g') }}#}" style="padding-right: 10px; margin-top: -10px; margin-bottom: -10px" />{{ app.user.username }}</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="#" data-target="#user-modal" data-toggle="modal">
+                            Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="starter-template">
+                        {% block body %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="LoginModal" style="padding-top: 150px">
+    {#<div class="modal-body">#}
+    {% if app.user is empty %}
+        {#{{ render(controller('FOSUserBundle:Profile:show')) }}#}
+        {#{% else %}#}
+        {{ render(controller('FOSUserBundle:Security:loginModal')) }}
+    {% endif %}
+    {#</div>#}
+</div>
+<script src="{{ asset('js/jquery.js') }}"></script>
+<!-- Include all JavaScripts, compiled by Assetic -->
+<script src="{{ asset('js/bootstrap.js') }}"></script>
+<script>
+    $("#menu-toggle").click(function(e) {
+        $(".menu-label").each(function() {
+            $(this).toggle();
+        });
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        $(this).toggleClass("button-toggled");
+    });
+</script>
+
+</body>
+</html>
