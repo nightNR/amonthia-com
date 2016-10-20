@@ -2,6 +2,7 @@ services:
 #    amonthia.example:
 #        class: Night\AmonthiaBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+
   amonthia.user_provider:
         class: Night\AmonthiaBundle\Service\UserProvider
         arguments: [@fos_user.user_manager, @security.password_encoder, {facebook: facebook_id, google: google_id}]
