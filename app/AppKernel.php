@@ -20,6 +20,8 @@ class AppKernel extends Kernel
 
             new \Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
 
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new AppBundle\AppBundle(),

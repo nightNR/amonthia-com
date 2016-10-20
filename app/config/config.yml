@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@UserBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -93,6 +94,7 @@ assetic:
                     - %kernel.root_dir%/../vendor/braincrafted/bootstrap-bundle/Braincrafted/Bundle/BootstrapBundle/Resources/less/form.less
                     - %kernel.root_dir%/../src/Night/AmonthiaBundle/Resources/css/main.css
                     - %kernel.root_dir%/../src/Night/AmonthiaBundle/Resources/css/sidebar.css
+                    - %kernel.root_dir%/../src/Night/AmonthiaBundle/Resources/css/bootstrap-social.css
 
 braincrafted_bootstrap:
     output_dir:
@@ -121,7 +123,31 @@ fos_user:
           confirmation:
             enabled: true
           form:
-            type: UserBundle\Form\Type\RegistrationFormType
+            type: app_user_registration
     profile:
           form:
-            type: UserBundle\Form\Type\ProfileFormType
+            type: fos_user_profile
+
+hwi_oauth:
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_names: [main]
+    connect:
+            account_connector: amonthia.user_provider
+    fosub:
+            username_iterations: 30
+            properties:
+                facebook:    facebook_id
+                google: google_id
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           657001304473350
+            client_secret:       8fb3bbca8f2ddb80894dc06dc81ca22f
+            scope:               "email"
+            options:
+                display: popup
+        google:
+            type: google
+            client_id: "256003520636-bftpaa593b5k2kbn051cccbdvo9l5pu9.apps.googleusercontent.com"
+            client_secret: "AMgXcbNlSgnUBPV_UI52xpxi"
+            scope: "email profile"

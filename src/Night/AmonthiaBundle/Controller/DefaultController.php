@@ -14,4 +14,13 @@ class DefaultController extends Controller
     {
         return $this->render('AmonthiaBundle:Default:index.html.twig');
     }
+
+    /**
+     * @Route("/auth")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function authAction()
+    {
+        return $this->render('AmonthiaBundle:Auth:auth.html.twig');
+    }
 }

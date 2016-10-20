@@ -8,9 +8,9 @@ services:
         class: UserBundle\Form\Type\RegistrationFormType
         tags:
             - { name: form.type, alias: app_user_registration }
-        arguments: [Night\AmonthiaBundle\Entity\User]
+        arguments: [UserBundle\Entity\User]
     app.form.profile:
             class: UserBundle\Form\Type\ProfileFormType
             tags:
                 - { name: form.type, alias: app_user_profile }
-            arguments: [Night\AmonthiaBundle\Entity\User]
+            arguments: [UserBundle\Entity\User]
