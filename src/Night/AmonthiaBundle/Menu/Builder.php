@@ -12,6 +12,7 @@ namespace Night\AmonthiaBundle\Menu;
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Translation\Translator;
 
 class Builder implements ContainerAwareInterface
 {
@@ -21,60 +22,74 @@ class Builder implements ContainerAwareInterface
     {
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');
+        /**
+         * @var Translator $translator
+         */
+        $translator = $this->container->get('translator');
+
 
         $menu->addChild('home', [
             'route' => 'night_amonthia_default_index',
-            'label' => '<span class="menu-label">Home</span><span class="icon glyphicon glyphicon-home"></span>',
+            'label' => '<span class="menu-label">'.$translator->trans('menu.home', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-home"></span>',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">Campaigns</span><span class="icon glyphicon glyphicon-flag"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.campaigns', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-flag"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">History</span><span class="icon glyphicon glyphicon-book"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.history', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-book"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">Codex</span><span class="icon glyphicon glyphicon-tasks"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.codex', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-tasks"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">Map</span><span class="icon glyphicon glyphicon-map-marker"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.map', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-map-marker"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">Members</span><span class="icon glyphicon glyphicon-knight"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.members', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-knight"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">Gallery</span><span class="icon glyphicon glyphicon-picture"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.gallery', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-picture"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">Downloads</span><span class="icon glyphicon glyphicon-download"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.downloads', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-download"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
-        $menu->addChild('<span class="menu-label">Forum</span><span class="icon glyphicon glyphicon-bullhorn"></span>', [
+        $menu->addChild('<span class="menu-label">'.$translator->trans('menu.forum', [], 'AmonthiaBundle').'</span><span class="icon glyphicon glyphicon-bullhorn"></span>', [
             'route' => 'homepage',
             'extras' => [
-                'safe_label' => true
+                'safe_label' => true,
+                'translation_domain' => false
             ]
         ]);
 

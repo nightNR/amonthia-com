@@ -1,0 +1,15 @@
+menu:
+    home: "Domu"
+    campaigns: "Vypravy"
+    history: "Historie"
+    codex: "Kodex"
+    map: "Mapa"
+    members: "Clenove"
+    gallery: "Galerie"
+    downloads: "Na stahnuti"
+    forum: "Forum"
+
+security:
+    profile: "Profil"
+    login: "Prihlaseni"
+    logout: "Odhlasit"

@@ -1,0 +1,17 @@
+{% extends '@BraincraftedBootstrap/Menu/bootstrap.html.twig' %}
+{% block label %}
+    {%- set translation_domain = item.extra('translation_domain', 'messages') -%}
+    {% if options.allow_safe_labels and item.getExtra('safe_label', false) %}
+        {%- if translation_domain is not same as(false) -%}
+            {{ item.label|trans(item.getExtra('translation_params', {}), item.getExtra('translation_domain', 'messages'))|raw|parse_icons }}
+        {% else %}
+            {{ item.label|raw|parse_icons }}
+        {% endif %}
+    {% else %}
+        {%- if translation_domain is not same as(false) -%}
+            {{ item.label|trans(item.getExtra('translation_params', {}), item.getExtra('translation_domain', 'messages'))|parse_icons }}
+        {% else %}
+            {{ item.label|parse_icons }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
