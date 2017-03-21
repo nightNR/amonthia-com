@@ -61,6 +61,10 @@ body {
     min-height: 40px;
 }
 
+#sidebar-wrapper .menu-label {
+    display: none;
+}
+
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
     color: #fff;
     background-color: #8a8a8a;

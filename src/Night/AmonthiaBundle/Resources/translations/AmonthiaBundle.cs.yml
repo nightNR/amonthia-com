@@ -13,3 +13,13 @@ security:
     profile: "Profil"
     login: "Prihlaseni"
     logout: "Odhlasit"
+    connect:
+        facebook: "Spojit"
+        google: "Spojit"
+        google_connected: "Spojeno"
+        facebook_connected: "Spojeno"
+        success: "Ucet byl uspesne spojen se sluzbou %service%"
+
+user:
+  edit_profile: "Upravit"
+  email: "Email"

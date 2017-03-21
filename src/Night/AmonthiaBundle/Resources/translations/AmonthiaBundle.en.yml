@@ -8,3 +8,18 @@ menu:
     gallery: "Gallery"
     downloads: "Downloads"
     forum: "Forum"
+
+security:
+    profile: "Profile"
+    login: "Login"
+    logout: "Logout"
+    connect:
+        facebook: "Connect"
+        google: "Connect"
+        google_connected: "Connected"
+        facebook_connected: "Connected"
+        success: "Account was successfully connected to %service%"
+
+user:
+  edit_profile: "Edit"
+  email: "Email"

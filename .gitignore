@@ -13,4 +13,6 @@
 /web/fonts
 /web/js
 /web/css
+/web/assetic
+/web/uploads/*
 .idea

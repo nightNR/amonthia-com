@@ -2,6 +2,7 @@
 
 namespace UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,26 +27,26 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
+     * @ORM\OneToOne(targetEntity="UserBundle\Entity\LoginFacebook", mappedBy="user",cascade={"persist"})
      */
-    protected $facebook_id;
+    protected $facebookLogin;
 
     /**
-     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
+     * @ORM\OneToOne(targetEntity="UserBundle\Entity\LoginGoogle", mappedBy="user",cascade={"persist"})
      */
-    protected $facebook_access_token;
+    protected $googleLogin;
+
+    /**
+     * @var ArrayCollection <Setting>
+     * @ORM\OneToMany(targetEntity="UserBundle\Entity\Setting", mappedBy="user", orphanRemoval=true)
+     */
+    protected $settings;
 
     /**
      * @var
-     * @ORM\Column(name="google_id", type="string", length=255, nullable=true)
+     * @ORM\OneToMany(targetEntity="Application\Sonata\MediaBundle\Entity\Gallery", mappedBy="author", orphanRemoval=true)
      */
-    protected $google_id;
-
-    /**
-     * @var
-     * @ORM\Column(name="google_access_token", type="string", length=255, nullable=true)
-     */
-    protected $google_access_token;
+    protected $galleries;
 
     /**
      * @return mixed
@@ -64,67 +65,79 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return null|LoginFacebook
      */
-    public function getFacebookId()
+    public function getFacebookLogin()
     {
-        return $this->facebook_id;
+        return $this->facebookLogin;
     }
 
     /**
-     * @param mixed $facebook_id
+     * @param LoginFacebook $facebookLogin
      */
-    public function setFacebookId($facebook_id)
+    public function setFacebookLogin(LoginFacebook $facebookLogin)
     {
-        $this->facebook_id = $facebook_id;
+        $this->facebookLogin = $facebookLogin;
+        if($facebookLogin->getUser() === null) {
+            $facebookLogin->setUser($this);
+        }
     }
 
     /**
-     * @return mixed
+     * @return null|LoginGoogle
      */
-    public function getFacebookAccessToken()
+    public function getGoogleLogin()
     {
-        return $this->facebook_access_token;
+        return $this->googleLogin;
     }
 
     /**
-     * @param mixed $facebook_access_token
+     * @param LoginGoogle $googleLogin
      */
-    public function setFacebookAccessToken($facebook_access_token)
+    public function setGoogleLogin(LoginGoogle $googleLogin)
     {
-        $this->facebook_access_token = $facebook_access_token;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGoogleId()
-    {
-        return $this->google_id;
-    }
-
-    /**
-     * @param mixed $google_id
-     */
-    public function setGoogleId($google_id)
-    {
-        $this->google_id = $google_id;
+        $this->googleLogin = $googleLogin;
+        if($googleLogin->getUser() === null) {
+            $googleLogin->setUser($this);
+        }
     }
 
     /**
      * @return mixed
      */
-    public function getGoogleAccessToken()
+    public function getSettings()
     {
-        return $this->google_access_token;
+        return $this->settings;
     }
 
     /**
-     * @param mixed $google_access_token
+     * @param mixed $settings
      */
-    public function setGoogleAccessToken($google_access_token)
+    public function setSettings($settings)
     {
-        $this->google_access_token = $google_access_token;
+        $this->settings = $settings;
     }
 
+    public function getSetting($settingId)
+    {
+        /** @var Setting $setting */
+        foreach($this->settings as $setting){
+            if($setting->getSettingId() == $settingId) {
+                return $setting;
+            }
+        }
+        $setting = new Setting();
+        $setting->setSettingId($settingId);
+        $setting->setValue(Setting::$DEFAULT_VALUES[$settingId]);
+        $this->addSetting($setting);
+        return $setting;
+    }
+
+    public function addSetting(Setting $setting)
+    {
+        if($setting->getUser() === null) {
+            $setting->setUser($this);
+        }
+        $this->settings->add($setting);
+    }
 }

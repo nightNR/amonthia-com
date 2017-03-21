@@ -1,3 +1,8 @@
+hwi_o_auth_extend:
+    resource: "@HwiOAuthExtendBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 amonthia:
     resource: "@AmonthiaBundle/Controller/"
     type:     annotation
@@ -43,3 +48,20 @@ facebook_login:
 
 google_login:
     pattern: /login/check-google
+
+gallery:
+    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
+    prefix: /media/gallery
+
+media:
+    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+    prefix: /media
+
+admin_area:
+    resource: "@SonataAdminBundle/Resources/config/routing/sonata_admin.xml"
+    prefix: /admin
+
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin

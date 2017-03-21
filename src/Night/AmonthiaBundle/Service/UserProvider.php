@@ -8,19 +8,28 @@
 
 namespace Night\AmonthiaBundle\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseProvider;
+use Symfony\Bundle\FrameworkBundle\Templating\Asset\PackageFactory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use UserBundle\Entity\LoginFacebook;
+use UserBundle\Entity\LoginGoogle;
+use UserBundle\Entity\LoginInterface;
+use UserBundle\Entity\OAuthUser;
 
 class UserProvider extends BaseProvider
 {
-    protected $passwordEncoder;
+    protected $session;
 
-    public function __construct(UserManagerInterface $userManager, UserPasswordEncoderInterface $passwordEncoder, array $properties)
+    protected $em;
+
+    public function __construct(UserManagerInterface $userManager, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Session\Session $session, array $properties)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->session = $session;
+        $this->em = $em;
         parent::__construct($userManager, $properties);
     }
 
@@ -29,22 +38,36 @@ class UserProvider extends BaseProvider
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
-        $property = $this->getProperty($response);
-        $username = $response->getUsername();
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
-        $setter = 'set'.ucfirst($service);
-        $setter_id = $setter.'Id';
-        $setter_token = $setter.'AccessToken';
-        //we "disconnect" previously connected users
-        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
-            $previousUser->$setter_id(null);
-            $previousUser->$setter_token(null);
-            $this->userManager->updateUser($previousUser);
+
+        $username = $response->getUsername();
+
+        if($service == 'facebook') {
+            $loginTypeClass = "UserBundle:LoginFacebook";
+        } else {
+            $loginTypeClass = "UserBundle:LoginGoogle";
         }
+
+        /** @var LoginInterface $login */
+        $login = $this->em->getRepository($loginTypeClass)->find($username);
+        //we "disconnect" previously connected users
+        if (null !== $login) {
+            throw new \Exception(sprintf("Account already connected with %s", [$service]));
+        }
+        /** @var \UserBundle\Entity\User $user */
         //we connect current user
-        $user->$setter_id($username);
-        $user->$setter_token($response->getAccessToken());
+        if($service == 'facebook') {
+            $loginFacebook = new LoginFacebook();
+            $loginFacebook->setId($response->getUsername());
+            $loginFacebook->setAccessToken($response->getAccessToken());
+            $user->setFacebookLogin($loginFacebook);
+        } else {
+            $loginGoogle = new LoginGoogle();
+            $loginGoogle->setId($response->getUsername());
+            $loginGoogle->setAccessToken($response->getAccessToken());
+            $user->setGoogleLogin($loginGoogle);
+        }
         $this->userManager->updateUser($user);
     }
     /**
@@ -53,34 +76,29 @@ class UserProvider extends BaseProvider
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $service = $response->getResourceOwner()->getName();
-        $setter = 'set'.ucfirst($service);
-        $setter_id = $setter.'Id';
-        $setter_token = $setter.'AccessToken';
-
         $username = $response->getUsername();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
-        if(null === $user) {
-            $user = $this->userManager->findUserBy(['emailCanonical' => $response->getEmail()]);
+
+        if($service == 'facebook') {
+            $loginTypeClass = "UserBundle:LoginFacebook";
+        } else {
+            $loginTypeClass = "UserBundle:LoginGoogle";
         }
-       if(null === $user) {
-            $user = $this->userManager->findUserBy(['usernameCanonical' => $response->getNickname()]);
-        }
+
+        /** @var LoginInterface $login */
+        $login = $this->em->getRepository($loginTypeClass)->find($username);
+
         //when the user is registrating
-        if (null === $user) {
-//             create new user here
-            $user = $this->userManager->createUser();
-//
-//            I have set all requested data with the user's username
-//            modify here with relevant data
-            $user->setUsername($response->getNickname());
-            $user->setEmail($response->getEmail());
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $username));
-            $user->setEnabled(true);
+        if (null === $login) {
+            $this->session->set('oauth_user', (new OAuthUser($response))->asArray());
+
+            return null;
+        } else {
+            $user = $login->getUser();
+            $login->setId($username);
+            $login->setAccessToken($response->getAccessToken());
+            $this->userManager->updateUser($user);
+            return $user;
         }
-        $user->$setter_id($username);
-        $user->$setter_token($response->getAccessToken());
-        $this->userManager->updateUser($user);
-        return $user;
     }
 
 }

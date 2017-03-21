@@ -7,7 +7,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: cs
+    locale: en
 
 framework:
     #esi:             ~
@@ -50,6 +50,8 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
+        types:
+            json: Sonata\Doctrine\Types\JsonType
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
@@ -63,18 +65,16 @@ doctrine:
                 naming_strategy: doctrine.orm.naming_strategy.underscore
 #                auto_mapping: true
                 mappings:
-#                            SonataMediaBundle: ~
+                    SonataMediaBundle: ~
+                    ApplicationSonataMediaBundle: ~
+                    ApplicationSonataClassificationBundle: ~
                     AmonthiaBundle:
                         type: annotation
                     UserBundle:
                         type: annotation
                     FOSUserBundle:
                         type: ~
-#                            SonataClassificationBundle: ~
-#    orm:
-#        auto_generate_proxy_classes: "%kernel.debug%"
-#        naming_strategy: doctrine.orm.naming_strategy.underscore
-#        auto_mapping: true
+                    SonataClassificationBundle: ~
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -99,6 +99,11 @@ assetic:
                     - %kernel.root_dir%/../src/Night/AmonthiaBundle/Resources/css/main.css
                     - %kernel.root_dir%/../src/Night/AmonthiaBundle/Resources/css/sidebar.css
                     - %kernel.root_dir%/../src/Night/AmonthiaBundle/Resources/css/bootstrap-social.css
+        application_js:
+                inputs:
+                    - %kernel.root_dir%/../src/Night/AmonthiaBundle/Resources/javascript/system.js
+                output:
+                    "js/application.js"
 
 braincrafted_bootstrap:
     output_dir:
@@ -155,3 +160,56 @@ hwi_oauth:
             client_id: "256003520636-bftpaa593b5k2kbn051cccbdvo9l5pu9.apps.googleusercontent.com"
             client_secret: "AMgXcbNlSgnUBPV_UI52xpxi"
             scope: "email profile"
+
+sonata_media:
+    # if you don't use default namespace configuration
+    #class:
+    #    media: MyVendor\MediaBundle\Entity\Media
+    #    gallery: MyVendor\MediaBundle\Entity\Gallery
+    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
+    default_context: default # you need to set a context
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+                - sonata.media.provider.vimeo
+
+            formats:
+                small: { width: 150 , quality: 95}
+                big:   { width: 500 , quality: 70}
+
+    cdn:
+        server:
+            path: /uploads/media # http://media.sonata-project.org/
+
+    filesystem:
+        local:
+            directory:  "%kernel.root_dir%/../web/uploads/media"
+            create:     false
+
+sonata_block:
+    default_contexts: [sonata_page_bundle]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+        #sonata.admin_doctrine_orm.block.audit:
+        #    contexts:   [admin]
+
+        sonata.block.service.text:
+        sonata.block.service.rss:
+
+        # Some specific block from the SonataMediaBundle
+        #sonata.media.block.media:
+        #sonata.media.block.gallery:
+        #sonata.media.block.feature_media:
+
+        # Some block with different templates
+        #acme.demo.block.demo:
+        #    templates:
+        #       - { name: 'Simple', template: 'AcmeDemoBundle:Block:demo_simple.html.twig' }
+        #       - { name: 'Big',    template: 'AcmeDemoBundle:Block:demo_big.html.twig' }

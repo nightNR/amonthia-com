@@ -1,0 +1,44 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% extends "@ApplicationSonataMedia/body.html.twig" %}
+
+{% block content %}
+    <div class="gallery-preview">
+        <div class="row">
+            {% for gallery in galleries %}
+                {{ _self.gallery_prototype(gallery) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% macro gallery_prototype(entry) %}
+    <div class="col-sm-3 col-md-2">
+        <a href="{{ url('sonata_media_gallery_view', {'id' : entry|sonata_urlsafeid }) }}">
+            <div class="thumbnail">
+                {% set rand_media = null %}
+                {% if entry.galleryHasMedias is not empty %}
+                    {% set rand_media = random(entry.galleryHasMedias) %}
+                {% endif %}
+                {% if rand_media is not null %}
+                    {% media random(entry.galleryHasMedias).media, 'small' %}
+                {% else %}
+                {% endif %}
+                <div class="caption">
+                    <h3>{{ entry.name }}</h3>
+                    {#<p>{{ dump(entry.galleryHasMedias) }}</p>#}
+                </div>
+            </div>
+        </a>
+    </div>
+{% endmacro %}
+
+

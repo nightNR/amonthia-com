@@ -22,6 +22,12 @@ security:
         submit: Přihlásit
         facebook: "Prihlasit pomoci Facebooku"
         google: "Prihlasit pomoci Google"
+    connect:
+            facebook: "Spojit"
+            google: "Spojit"
+            google_connected: "Spojeno"
+            facebook_connected: "Spojeno"
+            success: "Ucet byl uspesne spojen se sluzbou %service%"
 
 # Profile
 profile:
@@ -88,11 +94,16 @@ layout:
 
 # Form field labels
 form:
-    group_name: "Název skupiny:"
-    username: "Uživatelské jméno:"
-    email: "E-mail:"
-    current_password: "Současné heslo:"
-    password: "Heslo:"
-    password_confirmation: "Potvrzení hesla:"
-    new_password: "Nové heslo:"
-    new_password_confirmation: "Potvrzení hesla:"
+    group_name: "Název skupiny"
+    username: "Uživatelské jméno"
+    email: "E-mail"
+    current_password: "Současné heslo"
+    password: "Heslo"
+    password_confirmation: "Potvrzení hesla"
+    new_password: "Nové heslo"
+    new_password_confirmation: "Potvrzení hesla"
+
+user:
+  edit_profile: "Upravit"
+  email: "Email"
+  last_login: "Prihlasen"

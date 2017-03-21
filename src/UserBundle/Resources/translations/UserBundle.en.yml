@@ -22,6 +22,12 @@ security:
         submit: Login
         facebook: "Sign in with Facebook"
         google: "Sign in with Google"
+    connect:
+            facebook: "Connect"
+            google: "Connect"
+            google_connected: "Connected"
+            facebook_connected: "Connected"
+            success: "Account was successfully connected to %service%"
 
 # Profile
 profile:
@@ -96,3 +102,8 @@ form:
     password_confirmation: "Repeat password:"
     new_password: "New password:"
     new_password_confirmation: "Repeat new password:"
+
+user:
+  edit_profile: "Edit"
+  email: "Email"
+  last_login: "Last login"
